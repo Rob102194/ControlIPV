@@ -329,7 +329,7 @@ const RecetaForm = () => {
           <Modal.Title>Crear Nuevo Producto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ProductoForm onProductoCreado={handleProductoCreado} />
+          <ProductoForm onProductoCreado={handleProductoCreado} id={null} />
         </Modal.Body>
       </Modal>
     </Container>

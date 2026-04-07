@@ -51,7 +51,7 @@ class CrearProductoUseCase:
         """
         Ejecuta la creación de un producto, evitando duplicados por nombre.
         """
-        nombre_producto = producto_data.get('nombre').upper()
+        nombre_producto = producto_data.get('nombre', '').strip().upper()
         if self.repository.find_by_name(nombre_producto):
             raise ValueError(f"El producto con el nombre '{nombre_producto}' ya existe.")
             
@@ -100,8 +100,15 @@ class ActualizarProductoUseCase:
         if not producto_actual:
             return None
 
-        producto_data['nombre'] = producto_data.get('nombre').upper()
-        producto_data['unidad_medida'] = producto_data.get('unidad_medida').upper()
+        producto_data['nombre'] = producto_data.get('nombre', '').strip().upper()
+        producto_data['unidad_medida'] = producto_data.get('unidad_medida', '').strip().upper()
+
+        # Verificar si el nuevo nombre ya está en uso por otro producto
+        nombre_nuevo = producto_data['nombre']
+        producto_con_ese_nombre = self.repository.find_by_name(nombre_nuevo)
+        if producto_con_ese_nombre and str(producto_con_ese_nombre.id) != str(id):
+            raise ValueError(f"Ya existe otro producto con el nombre '{nombre_nuevo}'.")
+
         producto_actualizado = Producto.from_dict({**producto_data, "id": id})
         
         if producto_actual.nombre != producto_actualizado.nombre:
@@ -191,8 +198,8 @@ class ImportProductosExcel:
 
         for _, row in df.iterrows():
             producto_data = {
-                "nombre": row["nombre"],
-                "unidad_medida": row["unidad_medida"]
+                "nombre": str(row["nombre"]).strip().upper(),
+                "unidad_medida": str(row["unidad_medida"]).strip().upper()
             }
             
             if not self.repository.find_by_name(producto_data["nombre"]):

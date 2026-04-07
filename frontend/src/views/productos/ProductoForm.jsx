@@ -6,7 +6,7 @@ import { obtenerProductoPorId, actualizarProducto, crearProducto } from '../../a
 
 // Lista de unidades de medida disponibles
 const unidadesMedida = [
-  'u',
+  'unidades',
   'kg',
   'l',
   'trago',
@@ -31,7 +31,7 @@ const ProductoForm = ({ onProductoCreado, id: propsId }) => {
   // Estado para el producto, carga, guardado y errores
   const [producto, setProducto] = useState({
     nombre: '',
-    unidad_medida: 'u'
+    unidad_medida: 'unidades'
   });
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);

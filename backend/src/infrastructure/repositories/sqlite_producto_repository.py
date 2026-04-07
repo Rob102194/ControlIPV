@@ -28,8 +28,11 @@ class SQLiteProductoRepository(IProductoRepository):
             raise e
     
     def find_by_name(self, nombre: str) -> Producto:
-        """Obtiene un producto por su nombre."""
-        producto_db = self.db_session.query(db_models.Producto).filter_by(nombre=nombre).first()
+        """Obtiene un producto por su nombre (insensible a mayúsculas y espacios)."""
+        if not nombre:
+            return None
+        nombre_normalizado = nombre.strip().upper()
+        producto_db = self.db_session.query(db_models.Producto).filter_by(nombre=nombre_normalizado).first()
         if not producto_db:
             return None
         return Producto(
