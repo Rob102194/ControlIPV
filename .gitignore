@@ -1,0 +1,6 @@
+# Ignorar archivos de compilación y distribución
+dist
+build
+
+# Ignorar archivos de configuración de Visual Studio Code   
+.vscode
